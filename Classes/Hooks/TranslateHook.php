@@ -24,22 +24,17 @@ class TranslateHook
 
     protected GoogleTranslateService $googleService;
 
-    protected SettingsRepository $deeplSettingsRepository;
-
     protected PageRepository $pageRepository;
 
     private LanguageService $languageService;
 
     public function __construct(
-        ?SettingsRepository $settingsRepository = null,
         ?PageRepository $pageRepository = null,
         ?DeeplService $deeplService = null,
         ?GoogleTranslateService $googleService = null
     ) {
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->deeplSettingsRepository = $settingsRepository ?? $objectManager->get(SettingsRepository::class);
-        $this->deeplService = $deeplService ?? $objectManager->get(DeeplService::class);
-        $this->googleService = $googleService ?? $objectManager->get(GoogleTranslateService::class);
+        $this->deeplService = $deeplService ?? GeneralUtility::makeInstance(DeeplService::class);
+        $this->googleService = $googleService ?? GeneralUtility::makeInstance(GoogleTranslateService::class);
         $this->pageRepository = $pageRepository ?? GeneralUtility::makeInstance(PageRepository::class);
         $this->languageService = GeneralUtility::makeInstance(LanguageService::class);
     }
