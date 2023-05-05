@@ -63,7 +63,7 @@ class TranslateHook
         $customMode = $cmdmap['localization']['custom']['mode'] ?? null;
         [$sourceLanguage,] = explode('-', (string)$cmdmap['localization']['custom']['srcLanguageId']);
 
-        //translation mode set to deepl or google translate
+        //translation mode not set to DeepL translate
         if ($customMode === null) {
             return $content;
         }
