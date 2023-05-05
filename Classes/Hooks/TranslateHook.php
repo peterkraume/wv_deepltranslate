@@ -14,15 +14,11 @@ use WebVision\WvDeepltranslate\Domain\Repository\SettingsRepository;
 use WebVision\WvDeepltranslate\Exception\LanguageIsoCodeNotFoundException;
 use WebVision\WvDeepltranslate\Exception\LanguageRecordNotFoundException;
 use WebVision\WvDeepltranslate\Service\DeeplService;
-use WebVision\WvDeepltranslate\Service\GoogleTranslateService;
 use WebVision\WvDeepltranslate\Service\LanguageService;
-use WebVision\WvDeepltranslate\Utility\HtmlUtility;
 
 class TranslateHook
 {
     protected DeeplService $deeplService;
-
-    protected GoogleTranslateService $googleService;
 
     protected SettingsRepository $deeplSettingsRepository;
 
@@ -33,13 +29,11 @@ class TranslateHook
     public function __construct(
         ?SettingsRepository $settingsRepository = null,
         ?PageRepository $pageRepository = null,
-        ?DeeplService $deeplService = null,
-        ?GoogleTranslateService $googleService = null
+        ?DeeplService $deeplService = null
     ) {
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->deeplSettingsRepository = $settingsRepository ?? $objectManager->get(SettingsRepository::class);
         $this->deeplService = $deeplService ?? $objectManager->get(DeeplService::class);
-        $this->googleService = $googleService ?? $objectManager->get(GoogleTranslateService::class);
         $this->pageRepository = $pageRepository ?? GeneralUtility::makeInstance(PageRepository::class);
         $this->languageService = GeneralUtility::makeInstance(LanguageService::class);
     }
@@ -147,20 +141,6 @@ class TranslateHook
                         $content = htmlspecialchars_decode($translation['text'], ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5);
                         break;
                     }
-                }
-            }
-        } //mode google
-        elseif ($customMode == 'google') {
-            $response = $this->googleService->translate(
-                $targetLanguageRecord['language_isocode'],
-                $targetLanguageRecord['language_isocode'],
-                $content
-            );
-
-            if (!empty($response)) {
-                if (HtmlUtility::isHtml($response)) {
-                    $content = preg_replace('/\/\s/', '/', $response);
-                    $content = preg_replace('/\>\s+/', '>', $content);
                 }
             }
         }
