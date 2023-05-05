@@ -57,6 +57,9 @@
 			"ignore-as-root": false,
 			"web-dir": ".Build/Web",
 			"app-dir": ".Build"
+		},
+		"branch-alias": {
+			"dev-main": "v3.x-dev"
 		}
 	},
 	"require": {
